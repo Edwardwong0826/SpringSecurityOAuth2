@@ -1,0 +1,93 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate.ddl-auto: update
+env:
+  - name: MYSQL_DATABASE
+    value: springdemo
+  - name: MYSQL_USER
+    value: admin
+  - name: MYSQL_PASSWORD
+    value: 61376554
+  - name: MYSQL_ROOT_PASSWORD
+    value: 61376554
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+#debug: true
+---
+# yaml format xxx: xxxx
+# after : need to have one space
+server:
+  port: 8081
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/springdemo?useTimezone=true&serverTimezone=UTC
+    username: root
+    password: 61376554
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    config:
+      activate:
+        on-profile: dev
+
+---
+server:
+  port: 8081
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+spring:
+  datasource:
+    url: jdbc:mysql://springdemo.cairqwqbf3oy.ap-southeast-1.rds.amazonaws.com:3306/springdemo?useTimezone=true&serverTimezone=UTC
+    username: admin
+    password: 61376554
+  jpa:
+    # in hibernate core 6, MySQL5InnoDBDialect class was removed, use MySQLDialect instead
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQLDialect
+  config:
+    activate:
+      on-profile: dev2
+---
+server:
+  port: 8083
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;
+    username: sa
+    password: 123456
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  config:
+    activate:
+      on-profile: dev3
+#  spring.datasource.url=jdbc:mysql://localhost:3306/demo?useTimezone=true&serverTimezone=UTC
+#  spring.datasource.username=root
+#  spring.datasource.password=destiny61376554
+#  spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+
+# in spring boot auto configuration, it will go to org.springframework.boot:spring-boot-autoconfigure META/INF package/ spring.factories
+# to find xxxAutoConfiguration, xxxProperties and go inside based on the @Conditionalxxx to assert is it require to load the bean into IOC
