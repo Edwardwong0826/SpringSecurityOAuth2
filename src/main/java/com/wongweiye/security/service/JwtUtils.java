@@ -40,6 +40,7 @@ public class JwtUtils {
         Instant now = Instant.now();
         Instant expired = dateTime.toInstant(ZoneOffset.UTC).plusSeconds(3600L);
 
+        // scope is a set of claims in Oauth2 specification
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));

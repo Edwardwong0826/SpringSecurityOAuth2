@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   profiles:
-    active: dev
+    active: dev2
   jpa:
     hibernate.ddl-auto: update
 env:
